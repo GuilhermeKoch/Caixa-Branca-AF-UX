@@ -32,10 +32,10 @@ true se a autenticação foi bem-sucedida; false caso contrário.
 
 # Ferramentas
 
-Java 19
-Biblioteca JDBC
-MySQL Server
-GitHub
+<p> Java 19 </p>
+<p> Biblioteca JDBC </p>
+<p> MySQL Server </p>
+<p> GitHub </p>
 
 # Neste repositório remoto foram criadas 3 branches:
 
