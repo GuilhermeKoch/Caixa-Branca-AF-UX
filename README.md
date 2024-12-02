@@ -1,55 +1,26 @@
-# Projeto - Autenticação de Login com Java
+# Erros apresentados no código
 
-O projeto é desenvolvido para gerenciar operações relacionadas à autenticação de usuários em um sistema, utilizando um banco de dados MySQL. Ele oferece funcionalidades básicas para estabelecer uma conexão com o banco de dados e verificar se um usuário existe, validando o login e a senha fornecidos.
+## 1. Problema no carregamento do driver JDBC
 
-## Funcionalidades
+Class.forName("com.mysql.Driver.Manager").newInstance();
+Este código está tentando carregar a classe do driver JDBC para MySQL, mas o nome da classe está incorreto. O nome correto da classe do driver é com.mysql.cj.jdbc.Driver. Além disso, o método newInstance() é desnecessário em versões mais recentes do Java.
 
-1. Estabelecer Conexão com o Banco de Dados:
+## 2. Construção de string SQL com erros de sintaxe
 
-O método conectarBD() é responsável por estabelecer uma conexão com o banco de dados MySQL.
-Ele utiliza o driver com.mysql.cj.jdbc.Driver para conectar-se ao banco de dados especificado no URL, com um usuário e senha fornecidos.
-Em caso de falha na conexão, uma mensagem de erro será exibida no console, e o método retornará null.
+sql += "select nome from usuarios";
+sql += "where login = " + "'" + login + "'";
+sql += "where login = " + "'" + senha + "'";
+Aqui, o SQL está mal formado. A cláusula WHERE está sendo repetida duas vezes. A instrução SQL correta deve usar AND para unir as condições de login e senha em um único WHERE.
 
-2. Verificar Usuário no Banco de Dados:
+## 3. Problema na variável result
+A variável result foi declarada como um campo da classe, mas não é necessário que ela seja uma variável de instância. Pode ser movida para dentro do método verificarUsuario como uma variável local.
 
-O método verificarUsuario(String login, String senha) valida se o usuário forneceu um login e senha corretos.
-Ele executa uma consulta SQL no banco de dados para procurar um usuário com os dados fornecidos.
-Utiliza PreparedStatement para proteger contra ataques de SQL Injection.
-Se o usuário for encontrado, o método:
-Define o atributo result como true.
-Armazena o nome do usuário no atributo nome.
-Caso contrário, retorna false.
+## 4. Conexão não fechada
 
-3. Acesso ao Nome do Usuário:
+A conexão com o banco de dados é aberta mas nunca fechada. Este erro provoca a abertura de conexões desnecessárias levando ao uso excessivo de memória e processamento, e o número de conexões abertas exceder o suportado pelo banco de dados, o acesso ao banco de dados será impossibilitado.
 
-O método getNome() retorna o nome do usuário autenticado após uma validação bem-sucedida.
-Se a autenticação não for bem-sucedida, ele retornará uma string vazia.
+## 5. Credenciais expostas
+As credenciais "user" e "password", utilizadas para acessar o banco de dados, estão expostas no código, permitindo que todos que tenham acesso ao código também tenham acesso às credenciais do usuário informado, possibilitando assim invasões e furto de dados do usuário.
 
-4. Resultado da Autenticação:
-
-O método isResult() retorna o estado da autenticação.
-true se a autenticação foi bem-sucedida; false caso contrário.
-
-# Ferramentas
-
-Java 19
-Biblioteca JDBC
-MySQL Server
-GitHub
-
-# Neste repositório remoto foram criadas 3 branches:
-
-1. Main:
-
-Contém o código fonte e um arquivo README.md com as principais falhas encontrados no código.
-
-2. Etapa 3:
-
-O arquivo README.md foi alterado para incluir:
-Grafo de Fluxo.
-Complexidade Ciclomática.
-Caminhos Básicos.
-
-3. Etapa 4:
-
-Adicionado um Javadoc contendo a documentação completa do projeto.
+## 6. Tratamento incompleto de erros 
+No bloco "catch (Exception e) { }", tanto na linha 15 quanto na linha 32, o erro é identificado pelo código, entretanto ele não é tratado dentro do bloco, além disso, também não é exibida mensagem alguma explicitando o erro, dificultando sua identificação e correção.
