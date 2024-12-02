@@ -2,7 +2,7 @@
 
 ## Grafo de Fluxo
 
-Grafo de Fluxo.png
+![Grafo de Fluxo](https://github.com/user-attachments/assets/01954339-e628-4ade-9df0-c86d678948f9)
 
 ## Complexidade Ciclomatica
 
